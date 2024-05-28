@@ -8,8 +8,10 @@ namespace ScenesManager
     {
         [SerializeField] private string sceneName;
         [SerializeField] private bool isAditive;
+        [SerializeField] private bool isInactive;
         public string SceneName => sceneName;
         public bool IsAditive => isAditive;
+        public bool IsInactive => isInactive;
 
         public AsyncOperation LoadScene()
         {
@@ -20,7 +22,6 @@ namespace ScenesManager
         {
             return SceneManager.UnloadSceneAsync(sceneName);
         }
-
 
         public void DisableGameObjects(GameObject controller)
         {

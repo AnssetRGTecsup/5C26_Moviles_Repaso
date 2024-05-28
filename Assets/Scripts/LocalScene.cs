@@ -7,6 +7,25 @@ public class LocalScene : MonoBehaviour
 {
     [SerializeField] private SceneConfiguration LocalConfiguration;
 
+    private void OnEnable()
+    {
+        if (LocalConfiguration.IsInactive)
+        {
+            LocalConfiguration.DisableGameObjects(this.gameObject);
+        }
+        else
+        {
+            LocalConfiguration.EnableGameObjects(this.gameObject);
+        }
+
+        
+    }
+
+    private void OnDisable()
+    {
+        
+    }
+
     [ContextMenu("Enable GameObjects")]
     public void EnableGameObjects()
     {

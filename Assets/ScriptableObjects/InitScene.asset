@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b59ecc3b1d4d3e345bf3f4ffd248e056, type: 3}
-  m_Name: Scene_Test
+  m_Name: InitScene
   m_EditorClassIdentifier: 
-  sceneName: Scene_Test
+  sceneName: InitScene
   isAditive: 1
   isInactive: 0

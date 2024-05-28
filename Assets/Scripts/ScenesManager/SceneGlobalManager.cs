@@ -40,7 +40,7 @@ namespace ScenesManager
             if (CurrentScene != null)
             {
                 _loadedScenes.Remove(CurrentScene);
-                _loadingProcesses.Add(CurrentScene.LoadScene());
+                _loadingProcesses.Add(CurrentScene.UnloadScene());
             }
 
             StartCoroutine(_AsyncProcesses);
