@@ -10,11 +10,14 @@ public class LoadSceneBar : MonoBehaviour
     [SerializeField] private Slider barSlider;
     [SerializeField] private SceneConfiguration MainScene;
     [SerializeField] private SceneConfiguration CurrrentScene;
-    [SerializeField] private SceneGlobalManager SceneGlobalManager;
+    [SerializeField] private SceneGlobalManager _SceneGlobalManager;
 
     private void Start()
     {
-        SceneGlobalManager.LoadScene(MainScene, CurrrentScene);
+        if (_SceneGlobalManager == null)
+            _SceneGlobalManager = SceneGlobalManager.Instance;
+
+        _SceneGlobalManager.LoadScene(MainScene, CurrrentScene);
     }
 
     private void OnEnable()
