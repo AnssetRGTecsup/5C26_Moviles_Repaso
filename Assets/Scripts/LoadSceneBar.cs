@@ -14,7 +14,7 @@ public class LoadSceneBar : MonoBehaviour
 
     private void Start()
     {
-        SceneGlobalManager.LoadSingle(MainScene);
+        _SceneGlobalManager.LoadSingle(MainScene);
         /*if (_SceneGlobalManager == null)
             _SceneGlobalManager = SceneGlobalManager.Instance;
 
