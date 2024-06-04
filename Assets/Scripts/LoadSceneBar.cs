@@ -13,7 +13,7 @@ public class LoadSceneBar : MonoBehaviour
 
     private void Start()
     {
-        SceneGlobalManager.LoadScene(MainScene);
+        SceneGlobalManager.LoadSingle(MainScene);
     }
 
     private void OnEnable()

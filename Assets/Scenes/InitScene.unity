@@ -1001,7 +1001,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Holder: {fileID: 812165510}
   barSlider: {fileID: 862372961}
-  MainScene: {fileID: 11400000, guid: 178396f4f3efaec4b82c568dddb9d225, type: 2}
+  MainScene: {fileID: 11400000, guid: 307fbecd7137d46459cedc2e0cfa5643, type: 2}
   SceneGlobalManager: {fileID: 2061938380}
 --- !u!114 &2061938380
 MonoBehaviour:

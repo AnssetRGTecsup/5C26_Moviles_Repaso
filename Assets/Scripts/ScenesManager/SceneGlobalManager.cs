@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,12 +18,35 @@ namespace ScenesManager
 
         private IEnumerator _AsyncProcesses;
 
+        private CancellationTokenSource tokenSource;
+
         private void Awake()
         {
             _AsyncProcesses = AsyncProcess();
 
             _loadedScenes = new();
             _loadingProcesses = new();
+        }
+
+        private void Start()
+        {
+            tokenSource = new CancellationTokenSource();
+        }
+
+        private void OnEnable()
+        {
+            
+        }
+
+        private void OnDisable()
+        {
+            tokenSource.Cancel();
+        }
+
+        public void LoadSingle(SceneConfiguration SceneToLoad)
+        {
+            _loadedScenes.Add(SceneToLoad);
+            AsyncProncessLoad(SceneToLoad);
         }
 
         public void LoadScene(SceneConfiguration SceneToLoad)
@@ -76,6 +101,80 @@ namespace ScenesManager
             _loadingProcesses = new();
 
             _AsyncProcesses = AsyncProcess();
+        }
+
+        private async void AsyncProncessLoad(SceneConfiguration SceneToLoad)
+        {
+            OnStartProgress?.Invoke();
+
+            AsyncOperation loadingOperation = SceneToLoad.LoadScene();
+
+            loadingOperation.allowSceneActivation = false;
+
+            do
+            {
+                await Task.Delay(100);
+                OnProgress?.Invoke(loadingOperation.progress);
+            } while (loadingOperation.progress < 0.9f);
+
+            OnFinishProgress?.Invoke();
+
+            loadingOperation.allowSceneActivation = true;
+        }
+
+
+        private async void GetRandomNumberAsync()
+        {
+            var number =  await WaitForRandom();
+
+            if (tokenSource.IsCancellationRequested)
+            {
+                Debug.Log("Task stoped");
+            }
+
+            Debug.Log(number);
+        }
+
+        private async Task<float> WaitForRandom()
+        {
+            Debug.Log("Hacking your Mind . . .");
+
+            float _randomNumber = UnityEngine.Random.Range(-5f, 5f);
+
+            await Task.Delay(TimeSpan.FromSeconds(1), tokenSource.Token);
+
+            if (tokenSource.IsCancellationRequested)
+            {
+                return 0;
+            }
+
+            return _randomNumber;
+        }
+
+        private async void GetRandomNumberTask()
+        {
+            var number = await WaitForRandom2();
+            if (tokenSource.IsCancellationRequested)
+            {
+                Debug.Log("Task stoped");
+            }
+            Debug.Log(number);
+        }
+        private Task<float> WaitForRandom2()
+        {
+            Debug.Log("Hacking your Mind . . .");
+            return Task.Run(() =>
+            {
+                if (tokenSource.IsCancellationRequested)
+                {
+                    return 0;
+                }
+                return FunctionThatReturnsRandomNumber();
+            }, tokenSource.Token);
+        }
+        private float FunctionThatReturnsRandomNumber()
+        {
+            return UnityEngine.Random.Range(-5f, 5f);
         }
     }
 }
