@@ -9,6 +9,8 @@ namespace ScenesManager
 {
     public class SceneGlobalManager : MonoBehaviour
     {
+        public static SceneGlobalManager Instance { get; private set; }
+
         private List<SceneConfiguration> _loadedScenes;
         private List<AsyncOperation> _loadingProcesses;
 
@@ -22,6 +24,11 @@ namespace ScenesManager
 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+                Destroy(this.gameObject);
+
+            Instance = this;
+
             _AsyncProcesses = AsyncProcess();
 
             _loadedScenes = new();
@@ -60,12 +67,13 @@ namespace ScenesManager
         public void LoadScene(SceneConfiguration SceneToLoad, SceneConfiguration CurrentScene = null)
         {
             _loadedScenes.Add(SceneToLoad);
+            Debug.Log(SceneToLoad.LoadScene().progress);
             _loadingProcesses.Add(SceneToLoad.LoadScene());
 
             if (CurrentScene != null)
             {
                 _loadedScenes.Remove(CurrentScene);
-                _loadingProcesses.Add(CurrentScene.LoadScene());
+                _loadingProcesses.Add(CurrentScene.UnloadScene());
             }
 
             StartCoroutine(_AsyncProcesses);
@@ -83,6 +91,8 @@ namespace ScenesManager
         {
             OnStartProgress?.Invoke();
 
+            yield return new WaitForSeconds(0.5f);
+
             float totalProgress = 0;
             for (int i = 0; i < _loadingProcesses.Count; i++)
             {
@@ -95,6 +105,8 @@ namespace ScenesManager
                     yield return null;
                 }
             }
+
+            yield return new WaitForSeconds(0.5f);
 
             OnFinishProgress?.Invoke();
 
